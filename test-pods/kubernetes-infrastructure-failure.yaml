@@ -9,7 +9,7 @@ spec:
   restartPolicy: Never
   containers:
   - name: web-frontend
-    image: ghcr.io/podmortem/podmortem/test-logs:latest
+    image: ghcr.io/podmortem/test-logs:latest
     imagePullPolicy: Always
     command: ["/scripts/log-runner.sh"]
     args: ["k8s-infrastructure-failure"]

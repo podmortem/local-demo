@@ -9,7 +9,7 @@ spec:
   restartPolicy: Never
   containers:
   - name: order-service
-    image: ghcr.io/podmortem/podmortem/test-logs:latest
+    image: ghcr.io/podmortem/test-logs:latest
     imagePullPolicy: Always
     command: ["/scripts/log-runner.sh"]
     args: ["microservices-cascade-failure"]
