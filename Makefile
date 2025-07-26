@@ -89,16 +89,16 @@ _wait-and-show-analysis:
 	@echo "Waiting for AI analysis..."
 	@echo "Press Ctrl+C to stop waiting..."
 	@for i in $$(seq 1 60); do \
-		if kubectl get podmortem demo-monitor -n $(DEMO_NAMESPACE) -o jsonpath='{.status.recentFailures}' 2>/dev/null | grep -q "explanation"; then \
+		if kubectl get podmortem demo-monitor -n $(DEMO_NAMESPACE) -o jsonpath='{.status.message}' 2>/dev/null | grep -q "Analysis completed with AI"; then \
 			echo ""; \
 			echo "========================================"; \
 			echo "AI ANALYSIS COMPLETE:"; \
 			echo "========================================"; \
-			kubectl get podmortem demo-monitor -n $(DEMO_NAMESPACE) -o jsonpath='{.status.recentFailures[-1].explanation}' 2>/dev/null; \
+			kubectl get podmortem demo-monitor -n $(DEMO_NAMESPACE) -o jsonpath='{.status.message}' 2>/dev/null | fold -s -w 80; \
 			echo ""; \
 			echo "----------------------------------------"; \
-			echo "Analysis Details:"; \
-			kubectl get podmortem demo-monitor -n $(DEMO_NAMESPACE) -o jsonpath='{.status.recentFailures[-1]}' 2>/dev/null | sed 's/},{/},\n{/g' | tail -1; \
+			echo "Analysis Phase:"; \
+			kubectl get podmortem demo-monitor -n $(DEMO_NAMESPACE) -o jsonpath='{.status.phase}' 2>/dev/null; \
 			echo ""; \
 			break; \
 		fi; \
