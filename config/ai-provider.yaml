@@ -13,7 +13,7 @@ spec:
   providerId: "ollama"
   
   # Configuration for Ollama (local AI)
-  apiUrl: "https://pgm6vtymqsbiib-11434.proxy.runpod.net/"
+  apiUrl: "https://localhost:11434/"
   modelId: "mistral:7b"
   
   # Common settings
