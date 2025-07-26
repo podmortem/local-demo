@@ -1,0 +1,78 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: podmortem-demo-viewer
+  namespace: demo
+  labels:
+    app.kubernetes.io/name: podmortem-demo-viewer
+    app.kubernetes.io/part-of: podmortem-demo
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: demo
+  name: podmortem-demo-viewer
+  labels:
+    app.kubernetes.io/name: podmortem-demo-viewer
+    app.kubernetes.io/part-of: podmortem-demo
+rules:
+- apiGroups: [""]
+  resources: ["pods", "pods/log", "events"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["podmortem.redhat.com"]
+  resources: ["*"]
+  verbs: ["get", "list", "watch"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: podmortem-demo-viewer
+  namespace: demo
+  labels:
+    app.kubernetes.io/name: podmortem-demo-viewer
+    app.kubernetes.io/part-of: podmortem-demo
+subjects:
+- kind: ServiceAccount
+  name: podmortem-demo-viewer
+  namespace: demo
+roleRef:
+  kind: Role
+  name: podmortem-demo-viewer
+  apiGroup: rbac.authorization.k8s.io
+
+---
+# ClusterRole for accessing Podmortem CRDs across namespaces (read-only)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: podmortem-demo-cluster-viewer
+  labels:
+    app.kubernetes.io/name: podmortem-demo-viewer
+    app.kubernetes.io/part-of: podmortem-demo
+rules:
+- apiGroups: ["podmortem.redhat.com"]
+  resources: ["aiproviders", "patternlibraries"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["namespaces"]
+  verbs: ["get", "list"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: podmortem-demo-cluster-viewer
+  labels:
+    app.kubernetes.io/name: podmortem-demo-viewer
+    app.kubernetes.io/part-of: podmortem-demo
+subjects:
+- kind: ServiceAccount
+  name: podmortem-demo-viewer
+  namespace: demo
+roleRef:
+  kind: ClusterRole
+  name: podmortem-demo-cluster-viewer
+  apiGroup: rbac.authorization.k8s.io 

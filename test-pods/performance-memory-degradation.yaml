@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: performance-memory-degradation-test
+  namespace: demo
+  labels:
+    test-scenario: "true"
+spec:
+  restartPolicy: Never
+  containers:
+  - name: analytics-service
+    image: ghcr.io/podmortem/podmortem/test-logs:latest
+    imagePullPolicy: Always
+    command: ["/scripts/log-runner.sh"]
+    args: ["performance-memory-degradation"]
+    resources:
+      limits:
+        memory: "512Mi"
+        cpu: "300m"
+      requests:
+        memory: "256Mi"
+        cpu: "150m"

@@ -1,0 +1,47 @@
+2024-01-15 12:00:00.100 INFO  [main] kubelet: Starting kubelet version v1.28.4
+2024-01-15 12:00:00.201 INFO  [main] kubelet: Successfully registered node worker-node-3 with API server
+2024-01-15 12:00:00.302 INFO  [sync-loop] kubelet: Syncing 15 pods from API server
+2024-01-15 12:00:05.403 WARN  [kubelet] kubelet: Image pull failed for registry.redhat.io/ubi8/openjdk-11:latest
+2024-01-15 12:00:05.504 ERROR [kubelet] kubelet: Failed to pull image "registry.redhat.io/ubi8/openjdk-11:latest": rpc error: code = Unknown desc = Error response from daemon: pull access denied for registry.redhat.io/ubi8/openjdk-11, repository does not exist or may require 'docker login'
+2024-01-15 12:00:05.605 ERROR [pod-worker] kubelet: Error syncing pod podmortem-operator-7b8f9d6c8-hm4x9_podmortem-system(c4e9a8b2-3f2e-4a7d-8c0f-1234567890ab): failed to "StartContainer" for "operator" with ErrImagePull: "rpc error: code = Unknown desc = Error response from daemon: pull access denied for registry.redhat.io/ubi8/openjdk-11, repository does not exist or may require 'docker login'"
+2024-01-15 12:00:05.706 WARN  [event-recorder] kubelet: Pod "podmortem-operator-7b8f9d6c8-hm4x9" in namespace "podmortem-system": ErrImagePull
+2024-01-15 12:00:10.807 ERROR [kubelet] kubelet: Back-off pulling image "registry.redhat.io/ubi8/openjdk-11:latest"
+2024-01-15 12:00:10.908 ERROR [pod-worker] kubelet: Error syncing pod podmortem-operator-7b8f9d6c8-hm4x9_podmortem-system(c4e9a8b2-3f2e-4a7d-8c0f-1234567890ab): failed to "StartContainer" for "operator" with ImagePullBackOff: "Back-off pulling image \"registry.redhat.io/ubi8/openjdk-11:latest\""
+2024-01-15 12:00:11.009 WARN  [event-recorder] kubelet: Pod "podmortem-operator-7b8f9d6c8-hm4x9" in namespace "podmortem-system": ImagePullBackOff
+2024-01-15 12:00:15.110 INFO  [sync-loop] kubelet: Processing pod log-parser-deployment-6d4b7c8f9-kx2p7_podmortem-system
+2024-01-15 12:00:15.211 WARN  [kubelet] kubelet: Pod log-parser-deployment-6d4b7c8f9-kx2p7 exceeds memory limit 512Mi, current usage: 634Mi
+2024-01-15 12:00:15.312 ERROR [oom-killer] kernel: Memory cgroup out of memory: Killed process 15342 (java) total-vm:2097152kB, anon-rss:649216kB, file-rss:0kB, shmem-rss:0kB
+2024-01-15 12:00:15.413 ERROR [kubelet] kubelet: Pod "log-parser-deployment-6d4b7c8f9-kx2p7" in namespace "podmortem-system" was killed: OOMKilled
+2024-01-15 12:00:15.514 WARN  [event-recorder] kubelet: Pod "log-parser-deployment-6d4b7c8f9-kx2p7" in namespace "podmortem-system": OOMKilled
+2024-01-15 12:00:20.615 INFO  [kubelet] kubelet: Pod log-parser-deployment-6d4b7c8f9-kx2p7 restarting after OOMKill
+2024-01-15 12:00:25.716 WARN  [kubelet] kubelet: Pod log-parser-deployment-6d4b7c8f9-kx2p7 exceeds memory limit 512Mi, current usage: 578Mi
+2024-01-15 12:00:25.817 ERROR [oom-killer] kernel: Memory cgroup out of memory: Killed process 15789 (java) total-vm:2097152kB, anon-rss:592384kB, file-rss:0kB, shmem-rss:0kB
+2024-01-15 12:00:25.918 ERROR [kubelet] kubelet: Pod "log-parser-deployment-6d4b7c8f9-kx2p7" in namespace "podmortem-system" was killed: OOMKilled
+2024-01-15 12:00:26.019 WARN  [event-recorder] kubelet: Pod "log-parser-deployment-6d4b7c8f9-kx2p7" in namespace "podmortem-system": CrashLoopBackOff
+2024-01-15 12:00:30.120 INFO  [network-plugin] kube-proxy: Updating iptables rules for service podmortem-log-parser-service
+2024-01-15 12:00:30.221 ERROR [kube-proxy] kube-proxy: Failed to sync endpoint for service podmortem-system/podmortem-log-parser-service: no endpoints available
+2024-01-15 12:00:30.322 WARN  [kube-proxy] kube-proxy: Service podmortem-system/podmortem-log-parser-service has no endpoints
+2024-01-15 12:00:35.423 ERROR [controller-manager] controller-manager: Failed to update deployment podmortem-system/podmortem-operator: Operation cannot be fulfilled on deployments.apps "podmortem-operator": the object has been modified
+2024-01-15 12:00:35.524 WARN  [controller-manager] controller-manager: Deployment podmortem-system/podmortem-operator rollout failed
+2024-01-15 12:00:40.625 ERROR [scheduler] kube-scheduler: Failed to schedule pod podmortem-system/ai-interface-deployment-5c8d7f4b9-ql3m8: Insufficient cpu
+2024-01-15 12:00:40.726 WARN  [scheduler] kube-scheduler: Pod "ai-interface-deployment-5c8d7f4b9-ql3m8" in namespace "podmortem-system": FailedScheduling
+2024-01-15 12:00:40.827 INFO  [scheduler] kube-scheduler: 0/3 nodes are available: 1 Insufficient cpu, 2 node(s) had untolerated taint {node.kubernetes.io/unreachable: }
+2024-01-15 12:00:45.928 ERROR [kubelet] kubelet: Unable to mount volume "pattern-cache-pvc" for pod "podmortem-operator-7b8f9d6c8-new-xyz": rpc error: code = Internal desc = Failed to check if volume is formatted and/or attached: RPC failed; please check the node agent logs for more details
+2024-01-15 12:00:46.029 ERROR [csi-driver] csi-driver: Failed to attach volume pvc-a8b9c123-def4-56gh-78ij-9012345klmno: context deadline exceeded
+2024-01-15 12:00:46.130 WARN  [volume-manager] kubelet: VolumeManager.DesiredStateOfWorldPopulator failed to start desiredStateOfWorldPopulator
+2024-01-15 12:00:50.231 ERROR [etcd] etcd: request timed out, possibly due to previous leader failure
+2024-01-15 12:00:50.332 ERROR [apiserver] kube-apiserver: etcdserver: request timed out
+2024-01-15 12:00:50.433 WARN  [apiserver] kube-apiserver: Unable to list resource "podmortems" in API group "podmortem.redhat.com" at the cluster scope: etcdserver: request timed out
+2024-01-15 12:00:55.534 ERROR [coredns] coredns: [ERROR] plugin/errors: 2 podmortem-log-parser-service.podmortem-system.svc.cluster.local. A: read udp 10.244.0.10:53->10.244.1.15:45123: i/o timeout
+2024-01-15 12:00:55.635 ERROR [coredns] coredns: [ERROR] plugin/errors: 2 podmortem-ai-interface-service.podmortem-system.svc.cluster.local. A: read udp 10.244.0.10:53->10.244.1.20:52341: i/o timeout
+2024-01-15 12:01:00.736 CRITICAL [node-problem-detector] node-problem-detector: NodeNotReady detected on worker-node-3: kubelet not posting ready status
+2024-01-15 12:01:00.837 ERROR [cluster-autoscaler] cluster-autoscaler: Failed to scale up: Maximum node count reached
+2024-01-15 12:01:05.938 ERROR [ingress-controller] nginx-ingress-controller: Service "podmortem-system/podmortem-operator" does not have any active Endpoint
+2024-01-15 12:01:06.039 ERROR [ingress-controller] nginx-ingress-controller: Error obtaining Endpoints for Service "podmortem-system/podmortem-log-parser-service": endpoints "podmortem-log-parser-service" not found
+2024-01-15 12:01:10.140 WARN  [resource-quota-controller] resource-quota-controller: Quota exceeded for namespace podmortem-system: requests.memory
+2024-01-15 12:01:10.241 ERROR [admission-controller] admission-controller: Pod "podmortem-test-pod-789xyz" rejected: exceeded quota: compute-resources, requested: requests.memory=1Gi, used: requests.memory=8Gi, limited: requests.memory=8Gi
+2024-01-15 12:01:15.342 ERROR [horizontal-pod-autoscaler] horizontal-pod-autoscaler: Failed to get metrics for resource memory: unable to get metrics for resource memory: unable to fetch metrics from resource metrics API: the server could not find the requested resource (get pods.metrics.k8s.io)
+2024-01-15 12:01:20.443 CRITICAL [kubelet] kubelet: Node worker-node-3 not ready: container runtime not responding
+2024-01-15 12:01:20.544 ERROR [containerd] containerd: failed to reserve container name "podmortem-operator": name is reserved
+2024-01-15 12:01:20.645 ERROR [container-runtime] containerd: Failed to create container for pod podmortem-system/podmortem-operator-7b8f9d6c8-retry-abc: context deadline exceeded
+2024-01-15 12:01:25.746 FATAL [cluster-health] cluster-health-monitor: Critical cluster instability detected: Multiple node failures, etcd timeouts, widespread pod failures in podmortem-system namespace 

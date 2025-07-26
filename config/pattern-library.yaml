@@ -1,0 +1,27 @@
+apiVersion: podmortem.redhat.com/v1alpha1
+kind: PatternLibrary
+metadata:
+  name: demo-patterns
+  namespace: podmortem-system
+  labels:
+    app.kubernetes.io/name: podmortem-patterns
+    app.kubernetes.io/part-of: podmortem-demo
+  annotations:
+    podmortem.redhat.com/description: "Pattern library for demo scenarios"
+spec:
+  repositories:
+    - name: "quarkus-patterns"
+      url: "https://github.com/podmortem/patterns-quarkus.git"
+      branch: "main"
+      # Optional: Add authentication for private repos
+      # credentials:
+      #   secretRef: "git-credentials"
+  refreshInterval: "10m"
+  enabledLibraries:
+    - "quarkus-core-patterns"
+    - "quarkus-data-extensions"
+    - "quarkus-messaging-extensions" 
+    - "quarkus-rest-extensions"
+    - "quarkus-other-extensions"
+    - "quarkus-security-patterns"
+    - "quarkus-cloud-native-patterns" 

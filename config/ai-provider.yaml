@@ -1,0 +1,31 @@
+apiVersion: podmortem.redhat.com/v1alpha1
+kind: AIProvider
+metadata:
+  name: local-demo-ai-provider
+  namespace: podmortem-system
+  labels:
+    app.kubernetes.io/name: podmortem-ai-provider
+    app.kubernetes.io/part-of: podmortem-demo
+  annotations:
+    podmortem.redhat.com/description: "Local demo AI provider for testing scenarios"
+spec:
+  # Provider type: "ollama" or "openai"
+  providerId: "ollama"
+  
+  # Configuration for Ollama (local AI)
+  apiUrl: "https://pgm6vtymqsbiib-11434.proxy.runpod.net/"
+  modelId: "mistral:7b"
+  
+  # Common settings
+  timeoutSeconds: 120
+  maxRetries: 2
+  cachingEnabled: true
+  temperature: 0.1
+  maxTokens: 500
+  
+  # Additional Ollama-specific config
+  additionalConfig:
+    stream: "false"
+    num_predict: "500"
+    top_k: "40"
+    top_p: "0.9" 

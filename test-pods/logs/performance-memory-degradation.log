@@ -1,0 +1,69 @@
+2024-01-15 13:00:00.100 INFO  [main] io.quarkus.bootstrap.runner.Timing: Quarkus 3.6.4 on JVM started in 3.456s
+2024-01-15 13:00:00.201 INFO  [main] com.redhat.analytics.AnalyticsService: Starting Analytics Service v2.1.8
+2024-01-15 13:00:00.302 INFO  [main] org.hibernate.jpa.internal.util.LogHelper: HHH000204: Processing PersistenceUnitInfo [name: analytics]
+2024-01-15 13:00:00.403 INFO  [main] io.quarkus.redis.runtime.RedisRecorder: Redis client initialized
+2024-01-15 13:00:00.504 INFO  [main] io.quarkus.runtime.Quarkus: Application started in 2.234s
+2024-01-15 13:00:05.605 INFO  [executor-thread-1] com.redhat.analytics.service.DataProcessorService: Processing batch 1 of 100 analytics records
+2024-01-15 13:00:05.706 DEBUG [executor-thread-2] com.redhat.analytics.repository.EventRepository: Executing query: SELECT * FROM events WHERE timestamp > ?
+2024-01-15 13:00:05.807 INFO  [executor-thread-3] com.redhat.analytics.cache.RedisCache: Cache hit rate: 95.2%
+2024-01-15 13:00:10.908 INFO  [gc-thread] jvm: GC(1) Parallel GC 256M->128M(512M) 45.123ms
+2024-01-15 13:00:15.009 INFO  [executor-thread-4] com.redhat.analytics.service.DataProcessorService: Processing batch 2 of 100 analytics records
+2024-01-15 13:00:20.110 INFO  [gc-thread] jvm: GC(2) Parallel GC 256M->140M(512M) 52.456ms
+2024-01-15 13:00:25.211 WARN  [executor-thread-5] com.redhat.analytics.repository.EventRepository: Query execution time: 2.3s - exceeds threshold
+2024-01-15 13:00:30.312 INFO  [gc-thread] jvm: GC(3) Parallel GC 256M->152M(512M) 67.789ms
+2024-01-15 13:00:35.413 WARN  [connection-pool] io.agroal.pool.wrapper.ConnectionWrapper: Connection validation failed, removing from pool
+2024-01-15 13:00:40.514 INFO  [gc-thread] jvm: GC(4) Parallel GC 256M->168M(512M) 89.012ms
+2024-01-15 13:00:45.615 WARN  [executor-thread-6] com.redhat.analytics.service.DataProcessorService: Memory usage high: 412MB/512MB (80.5%)
+2024-01-15 13:00:50.716 INFO  [gc-thread] jvm: GC(5) Parallel GC 256M->185M(512M) 123.345ms
+2024-01-15 13:00:55.817 ERROR [executor-thread-7] com.redhat.analytics.repository.EventRepository: QueryTimeoutException: Query execution exceeded 5 seconds
+org.hibernate.QueryTimeoutException: could not execute query; SQL [select event0_.id as id1_0_, event0_.data as data2_0_, event0_.timestamp as timestamp3_0_ from events event0_ where event0_.timestamp>?]; nested exception is org.postgresql.util.PSQLException: ERROR: canceling statement due to user request
+	at org.hibernate.exception.internal.SQLStateConversionDelegate.convert(SQLStateConversionDelegate.java:103)
+	at org.hibernate.exception.internal.StandardSQLExceptionConverter.convert(StandardSQLExceptionConverter.java:42)
+	at org.hibernate.engine.jdbc.spi.SqlExceptionHelper.convert(SqlExceptionHelper.java:113)
+	at org.hibernate.loader.Loader.doList(Loader.java:2613)
+	at org.hibernate.loader.Loader.doList(Loader.java:2596)
+	at org.hibernate.loader.Loader.listIgnoreQueryCache(Loader.java:2428)
+	at org.hibernate.loader.Loader.list(Loader.java:2423)
+	at org.hibernate.loader.hql.QueryLoader.list(QueryLoader.java:497)
+	at org.hibernate.hql.internal.ast.QueryTranslatorImpl.list(QueryTranslatorImpl.java:387)
+	at org.hibernate.engine.query.spi.HQLQueryPlan.performList(HQLQueryPlan.java:236)
+	at org.hibernate.internal.SessionImpl.list(SessionImpl.java:1300)
+	at org.hibernate.internal.QueryImpl.list(QueryImpl.java:103)
+	at com.redhat.analytics.repository.EventRepository.findRecentEvents(EventRepository.java:78)
+2024-01-15 13:01:00.918 INFO  [gc-thread] jvm: GC(6) Parallel GC 256M->205M(512M) 167.678ms
+2024-01-15 13:01:05.019 WARN  [vertx-eventloop-thread-0] io.vertx.core.impl.ContextInternal: You have blocked the event loop for 2145ms
+2024-01-15 13:01:10.120 ERROR [thread-pool-manager] org.jboss.threads.EnhancedQueueExecutor: Thread pool 'default' exhausted, active: 50/50
+2024-01-15 13:01:15.221 INFO  [gc-thread] jvm: GC(7) Parallel GC 256M->228M(512M) 234.901ms
+2024-01-15 13:01:20.322 WARN  [executor-thread-8] com.redhat.analytics.cache.RedisCache: Redis connection timeout, cache unavailable
+2024-01-15 13:01:25.423 ERROR [redis-client] io.lettuce.core.RedisCommandTimeoutException: Command timed out after 3 second(s)
+	at io.lettuce.core.LettuceFutures.awaitOrCancel(LettuceFutures.java:135)
+	at io.lettuce.core.cluster.ClusterFutureSyncInvocationHandler.handleInvocation(ClusterFutureSyncInvocationHandler.java:123)
+	at io.lettuce.core.internal.AbstractInvocationHandler.invoke(AbstractInvocationHandler.java:80)
+	at com.sun.proxy.$Proxy123.get(Unknown Source)
+	at com.redhat.analytics.cache.RedisCache.getValue(RedisCache.java:45)
+	at com.redhat.analytics.service.DataProcessorService.processAnalytics(DataProcessorService.java:67)
+2024-01-15 13:01:30.524 INFO  [gc-thread] jvm: GC(8) Parallel GC 256M->251M(512M) 345.234ms
+2024-01-15 13:01:35.625 CRITICAL [memory-monitor] com.redhat.analytics.monitoring.MemoryMonitor: Memory usage critical: 487MB/512MB (95.1%)
+2024-01-15 13:01:40.726 ERROR [connection-pool] io.agroal.pool.ConnectionPool: Pool exhausted, no connections available (20/20 in use)
+2024-01-15 13:01:45.827 INFO  [gc-thread] jvm: GC(9) Parallel GC 256M->256M(512M) 567.890ms
+2024-01-15 13:01:50.928 WARN  [gc-thread] jvm: GC(10) Parallel GC 256M->256M(512M) 789.123ms - heap not reducing
+2024-01-15 13:01:55.029 ERROR [executor-thread-9] com.redhat.analytics.service.DataProcessorService: Memory allocation failed
+java.lang.OutOfMemoryError: Java heap space
+	at java.base/java.util.Arrays.copyOf(Arrays.java:3512)
+	at java.base/java.util.Arrays.copyOf(Arrays.java:3481)
+	at java.base/java.util.ArrayList.grow(ArrayList.java:267)
+	at java.base/java.util.ArrayList.grow(ArrayList.java:279)
+	at java.base/java.util.ArrayList.add(ArrayList.java:484)
+	at java.base/java.util.ArrayList.add(ArrayList.java:496)
+	at com.redhat.analytics.service.DataProcessorService.loadAnalyticsData(DataProcessorService.java:123)
+	at com.redhat.analytics.service.DataProcessorService.processAnalytics(DataProcessorService.java:89)
+	at com.redhat.analytics.rest.AnalyticsController.processData(AnalyticsController.java:56)
+2024-01-15 13:02:00.130 CRITICAL [jvm-monitor] jvm: OutOfMemoryError detected - heap dump generated
+2024-01-15 13:02:05.231 ERROR [health-check] io.quarkus.smallrye.health.runtime.SmallRyeHealthReporter: Health check 'database-health' failed: connection timeout
+2024-01-15 13:02:10.332 ERROR [health-check] io.quarkus.smallrye.health.runtime.SmallRyeHealthReporter: Health check 'redis-health' failed: connection unavailable
+2024-01-15 13:02:15.433 ERROR [health-check] io.quarkus.smallrye.health.runtime.SmallRyeHealthReporter: Health check 'memory-health' failed: heap utilization 98.7%
+2024-01-15 13:02:20.534 FATAL [main] com.redhat.analytics.AnalyticsService: Application unstable due to memory exhaustion
+2024-01-15 13:02:25.635 INFO  [gc-thread] jvm: GC(11) Parallel GC 512M->512M(512M) 1234.567ms - full GC unable to reclaim memory
+2024-01-15 13:02:30.736 ERROR [vertx-eventloop-thread-1] io.vertx.core.impl.ContextInternal: Event loop blocked for 5678ms - system unresponsive
+2024-01-15 13:02:35.837 FATAL [shutdown-hook] jvm: JVM terminating due to OutOfMemoryError - heap space exhausted
+2024-01-15 13:02:40.938 CRITICAL [container-runtime] kubernetes: Container terminated with exit code 137 (SIGKILL) - OOMKilled by kubelet 

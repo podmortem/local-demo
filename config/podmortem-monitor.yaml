@@ -1,0 +1,23 @@
+apiVersion: podmortem.redhat.com/v1alpha1
+kind: Podmortem
+metadata:
+  name: demo-monitor
+  namespace: demo
+  labels:
+    app.kubernetes.io/name: podmortem-monitor
+    app.kubernetes.io/part-of: podmortem-demo
+  annotations:
+    podmortem.redhat.com/description: "Monitor for demo test scenarios"
+spec:
+  # Monitor all pods with test-scenario=true label
+  podSelector:
+    matchLabels:
+      test-scenario: "true"
+  
+  # Reference to AI provider
+  aiProviderRef:
+    name: "local-demo-ai-provider"
+    namespace: "podmortem-system"
+  
+  # Enable AI analysis
+  aiAnalysisEnabled: true 

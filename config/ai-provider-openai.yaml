@@ -1,0 +1,36 @@
+apiVersion: podmortem.redhat.com/v1alpha1
+kind: AIProvider
+metadata:
+  name: openai-ai-provider
+  namespace: podmortem-system
+  labels:
+    app.kubernetes.io/name: podmortem-ai-provider
+    app.kubernetes.io/part-of: podmortem-demo
+  annotations:
+    podmortem.redhat.com/description: "OpenAI-compatible API provider for demo scenarios"
+spec:
+  providerId: "openai"
+  # Update these for your provider (base URLs only - /chat/completions is added automatically):
+  # OpenAI: https://api.openai.com/v1
+  # Anthropic: https://api.anthropic.com/v1  
+  # Local: http://localhost:5000/v1
+  # Gemini: https://generativelanguage.googleapis.com/v1beta/openai
+  apiUrl: "https://api.openai.com/v1"
+  modelId: "gpt-3.5-turbo"
+  timeoutSeconds: 120
+  maxRetries: 2
+  cachingEnabled: true
+  temperature: 0.1
+  maxTokens: 500
+  authenticationRef:
+    name: "openai-secret"
+    namespace: "podmortem-system"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: openai-secret
+  namespace: podmortem-system
+type: Opaque
+stringData:
+  api-key: "YOUR_API_KEY_HERE" 

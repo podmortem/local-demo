@@ -1,0 +1,81 @@
+2024-01-15 11:00:00.100 INFO  [main] io.quarkus.bootstrap.runner.Timing: Quarkus 3.6.4 on JVM started in 2.234s
+2024-01-15 11:00:00.201 INFO  [main] com.redhat.orderservice.OrderService: Starting Order Service v1.2.4
+2024-01-15 11:00:00.302 INFO  [main] io.quarkus.smallrye.health.runtime.SmallRyeHealthRecorder: Health checks enabled
+2024-01-15 11:00:00.403 INFO  [main] io.quarkus.kafka.client.runtime.KafkaRuntimeConfigProducer: Kafka producer configuration: bootstrap.servers=kafka-cluster:9092
+2024-01-15 11:00:00.504 INFO  [main] org.apache.kafka.clients.admin.AdminClientConfig: AdminClientConfig values: bootstrap.servers = [kafka-cluster:9092]
+2024-01-15 11:00:00.605 INFO  [vert.x-eventloop-thread-1] io.quarkus.vertx.http.runtime.VertxHttpRecorder: HTTP server listening on http://0.0.0.0:8080
+2024-01-15 11:00:00.706 INFO  [main] io.quarkus.runtime.Quarkus: Application started in 0.632s
+2024-01-15 11:00:15.807 INFO  [executor-thread-1] com.redhat.orderservice.rest.OrderController: Processing order request for customer 12345
+2024-01-15 11:00:15.908 DEBUG [executor-thread-1] com.redhat.orderservice.service.PaymentService: Calling payment-service for validation
+2024-01-15 11:00:16.009 INFO  [executor-thread-1] org.eclipse.microprofile.rest.client.RestClientBuilder: Building REST client for PaymentService
+2024-01-15 11:00:16.110 DEBUG [executor-thread-1] io.quarkus.rest.client.reactive.runtime.RestClientRecorder: Connecting to payment-service.default.svc.cluster.local:8080
+2024-01-15 11:00:18.211 WARN  [executor-thread-1] io.quarkus.rest.client.reactive.runtime.RestClientRecorder: Connection timeout for payment-service, retrying...
+2024-01-15 11:00:20.312 ERROR [executor-thread-1] org.eclipse.microprofile.rest.client.RestClientBuilder: ConnectException: Connection refused (Connection refused)
+java.net.ConnectException: Connection refused (Connection refused)
+	at java.base/java.net.PlainSocketImpl.socketConnect(Native Method)
+	at java.base/java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:412)
+	at java.base/java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:255)
+	at java.base/java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:237)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.base/java.net.Socket.connect(Socket.java:609)
+	at org.eclipse.microprofile.rest.client.RestClientBuilder.build(RestClientBuilder.java:245)
+	at com.redhat.orderservice.service.PaymentService.validatePayment(PaymentService.java:45)
+	at com.redhat.orderservice.rest.OrderController.createOrder(OrderController.java:78)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at io.quarkus.resteasy.reactive.server.runtime.QuarkusResteasyReactiveRequestContext.invokeHandler(QuarkusResteasyReactiveRequestContext.java:107)
+2024-01-15 11:00:20.413 ERROR [executor-thread-1] io.smallrye.faulttolerance.CircuitBreakerImpl: Circuit breaker 'PaymentService' opened due to failures
+2024-01-15 11:00:20.514 WARN  [executor-thread-1] com.redhat.orderservice.service.PaymentService: Payment service unavailable, using fallback
+2024-01-15 11:00:20.615 INFO  [executor-thread-1] com.redhat.orderservice.service.InventoryService: Checking inventory for product SKU-8899
+2024-01-15 11:00:20.716 DEBUG [executor-thread-1] io.quarkus.rest.client.reactive.runtime.RestClientRecorder: Connecting to inventory-service.default.svc.cluster.local:8080
+2024-01-15 11:00:25.817 WARN  [executor-thread-1] io.quarkus.rest.client.reactive.runtime.RestClientRecorder: SocketTimeoutException: Read timed out
+2024-01-15 11:00:25.918 ERROR [executor-thread-1] com.redhat.orderservice.service.InventoryService: ReadTimeoutException: timeout
+java.net.SocketTimeoutException: timeout
+	at java.base/java.net.SocketInputStream.socketRead0(Native Method)
+	at java.base/java.net.SocketInputStream.socketRead(SocketInputStream.java:115)
+	at java.base/java.net.SocketInputStream.read(SocketInputStream.java:168)
+	at java.base/java.net.SocketInputStream.read(SocketInputStream.java:140)
+	at java.base/java.io.BufferedInputStream.fill(BufferedInputStream.java:252)
+	at java.base/java.io.BufferedInputStream.read1(BufferedInputStream.java:292)
+	at java.base/java.io.BufferedInputStream.read(BufferedInputStream.java:351)
+	at java.base/sun.net.www.http.HttpClient.parseHTTPHeader(HttpClient.java:735)
+	at java.base/sun.net.www.http.HttpClient.parseHTTP(HttpClient.java:678)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1587)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1515)
+	at org.eclipse.microprofile.rest.client.RestClientBuilder.build(RestClientBuilder.java:278)
+	at com.redhat.orderservice.service.InventoryService.checkInventory(InventoryService.java:52)
+2024-01-15 11:00:25.019 ERROR [executor-thread-1] io.smallrye.faulttolerance.CircuitBreakerImpl: Circuit breaker 'InventoryService' opened due to timeout
+2024-01-15 11:00:26.120 WARN  [kafka-producer-network-thread] org.apache.kafka.clients.NetworkClient: [Producer clientId=producer-1] Connection to node -1 (kafka-cluster.kafka.svc.cluster.local/10.244.2.45:9092) could not be established. Broker may not be available.
+2024-01-15 11:00:26.221 ERROR [kafka-producer-network-thread] org.apache.kafka.clients.producer.internals.Sender: [Producer clientId=producer-1] Failed to send message to topic 'order-events'
+2024-01-15 11:00:26.322 ERROR [kafka-producer-network-thread] org.apache.kafka.common.errors.NetworkException: The server disconnected before a response was received.
+2024-01-15 11:00:26.423 ERROR [executor-thread-1] com.redhat.orderservice.messaging.OrderEventProducer: Failed to publish order event to Kafka
+org.apache.kafka.common.errors.TimeoutException: Topic order-events not present in metadata after 60000 ms.
+	at org.apache.kafka.clients.producer.internals.ProducerMetadata.awaitUpdate(ProducerMetadata.java:130)
+	at org.apache.kafka.clients.producer.KafkaProducer.doSend(KafkaProducer.java:1013)
+	at org.apache.kafka.clients.producer.KafkaProducer.send(KafkaProducer.java:914)
+	at org.apache.kafka.clients.producer.KafkaProducer.send(KafkaProducer.java:800)
+	at io.smallrye.reactive.messaging.kafka.impl.KafkaSink.send(KafkaSink.java:140)
+	at com.redhat.orderservice.messaging.OrderEventProducer.publishOrderEvent(OrderEventProducer.java:34)
+	at com.redhat.orderservice.rest.OrderController.createOrder(OrderController.java:95)
+2024-01-15 11:00:26.524 ERROR [executor-thread-1] com.redhat.orderservice.rest.OrderController: Order processing failed - multiple service failures
+2024-01-15 11:00:26.625 ERROR [executor-thread-1] org.jboss.resteasy.reactive.server.core.ResteasyReactiveRequestContext: Request failed
+jakarta.ws.rs.WebApplicationException: Service temporarily unavailable due to downstream failures
+	at com.redhat.orderservice.rest.OrderController.createOrder(OrderController.java:98)
+	at com.redhat.orderservice.rest.OrderController$quarkusrestinvoker$createOrder_593410bb5cdcf883ae3fc0b27d42d6dc0b43ab50.invoke(Unknown Source)
+	at org.jboss.resteasy.reactive.server.handlers.InvocationHandler.handle(InvocationHandler.java:29)
+	at io.quarkus.resteasy.reactive.server.runtime.QuarkusResteasyReactiveRequestContext.invokeHandler(QuarkusResteasyReactiveRequestContext.java:114)
+	at org.jboss.resteasy.reactive.common.core.AbstractResteasyReactiveContext.run(AbstractResteasyReactiveContext.java:145)
+	at io.quarkus.vertx.core.runtime.VertxCoreRecorder$14.runWith(VertxCoreRecorder.java:576)
+	at org.jboss.threads.EnhancedQueueExecutor$Task.run(EnhancedQueueExecutor.java:2449)
+	at org.jboss.threads.EnhancedQueueExecutor$ThreadBody.run(EnhancedQueueExecutor.java:1478)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+2024-01-15 11:00:30.726 WARN  [health-check-thread] io.quarkus.smallrye.health.runtime.SmallRyeHealthReporter: Health check 'payment-service-check' failed
+2024-01-15 11:00:30.827 WARN  [health-check-thread] io.quarkus.smallrye.health.runtime.SmallRyeHealthReporter: Health check 'inventory-service-check' failed
+2024-01-15 11:00:30.928 WARN  [health-check-thread] io.quarkus.smallrye.health.runtime.SmallRyeHealthReporter: Health check 'kafka-check' failed
+2024-01-15 11:00:31.029 ERROR [health-check-thread] io.quarkus.smallrye.health.runtime.SmallRyeHealthReporter: Overall health status: DOWN
+2024-01-15 11:00:31.130 WARN  [vert.x-eventloop-thread-3] io.vertx.core.http.impl.HttpServerImpl: Request timeout for /q/health/ready
+2024-01-15 11:00:35.231 INFO  [main] io.quarkus.runtime.ApplicationLifecycleManager: The application is stopping...
+2024-01-15 11:00:35.332 WARN  [shutdown-thread] org.apache.kafka.clients.producer.KafkaProducer: [Producer clientId=producer-1] Interrupted while joining ioThread
+2024-01-15 11:00:35.433 WARN  [shutdown-thread] io.smallrye.faulttolerance.CircuitBreakerImpl: Circuit breaker 'PaymentService' shutdown with 15 pending requests
+2024-01-15 11:00:35.534 WARN  [shutdown-thread] io.smallrye.faulttolerance.CircuitBreakerImpl: Circuit breaker 'InventoryService' shutdown with 8 pending requests
+2024-01-15 11:00:35.635 ERROR [shutdown-thread] com.redhat.orderservice.OrderService: Service shutdown due to cascade failure: payment-service unavailable, inventory-service timeout, kafka unreachable
+2024-01-15 11:00:35.736 INFO  [shutdown-thread] io.quarkus.runtime.Quarkus: order-service stopped in 0.404s 
