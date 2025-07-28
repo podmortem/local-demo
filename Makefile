@@ -91,9 +91,6 @@ _wait-and-show-analysis:
 	@for i in $$(seq 1 60); do \
 		if kubectl get podmortem demo-monitor -n $(DEMO_NAMESPACE) -o jsonpath='{.status.message}' 2>/dev/null | grep -q "Analysis completed with AI"; then \
 			echo ""; \
-			echo "========================================"; \
-			echo "AI ANALYSIS COMPLETE:"; \
-			echo "========================================"; \
 			kubectl get podmortem demo-monitor -n $(DEMO_NAMESPACE) -o jsonpath='{.status.message}' 2>/dev/null | fold -s -w 80; \
 			echo ""; \
 			echo "----------------------------------------"; \
