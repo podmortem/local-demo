@@ -273,6 +273,9 @@ make logs
 View pod events:
 ```bash
 make events
+# or directly
+kubectl get events -A --sort-by=.lastTimestamp
+kubectl describe pod <pod> -n <ns>
 ```
 
 Check cluster status:

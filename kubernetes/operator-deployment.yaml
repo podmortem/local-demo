@@ -41,6 +41,8 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
+        - name: PODMORTEM_WATCH_NAMESPACES
+          value: ""
         - name: POD_NAME
           valueFrom:
             fieldRef:
@@ -66,16 +68,15 @@ spec:
           initialDelaySeconds: 30
           periodSeconds: 30
           timeoutSeconds: 10
-          failureThreshold: 3
         readinessProbe:
           httpGet:
             path: /q/health/ready
             port: 8080
             scheme: HTTP
-          initialDelaySeconds: 5
-          periodSeconds: 10
-          timeoutSeconds: 10
-          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          failureThreshold: 60
+          timeoutSeconds: 5
         securityContext:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true

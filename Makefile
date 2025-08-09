@@ -86,17 +86,36 @@ _wait-and-show-analysis:
 	@sleep 5
 	@kubectl logs -l test-scenario=true -n $(DEMO_NAMESPACE) --tail=50 2>/dev/null || echo "Pod not ready yet, waiting..."
 	@echo "----------------------------------------"
-	@echo "Waiting for AI analysis..."
+	@echo "Waiting for analysis to complete..."
 	@echo "Press Ctrl+C to stop waiting..."
 	@for i in $$(seq 1 60); do \
-		if kubectl get podmortem demo-monitor -n $(DEMO_NAMESPACE) -o jsonpath='{.status.message}' 2>/dev/null | grep -q "Analysis completed with AI"; then \
+		POD_NAME=$$(kubectl get pods -l test-scenario=true -n $(DEMO_NAMESPACE) -o jsonpath='{.items[0].metadata.name}' 2>/dev/null); \
+		if [ -n "$$POD_NAME" ]; then \
+			ANALYSIS=$$(kubectl get pod $$POD_NAME -n $(DEMO_NAMESPACE) -o jsonpath='{.metadata.annotations.podmortem\.io/analysis}' 2>/dev/null); \
+			if [ -n "$$ANALYSIS" ]; then \
+				echo ""; \
+				echo "========================================"; \
+				echo "AI Analysis Complete:"; \
+				echo "========================================"; \
+				echo "$$ANALYSIS" | fold -s -w 80; \
+				echo ""; \
+				echo "----------------------------------------"; \
+				SEVERITY=$$(kubectl get pod $$POD_NAME -n $(DEMO_NAMESPACE) -o jsonpath='{.metadata.annotations.podmortem\.io/severity}' 2>/dev/null); \
+				TIMESTAMP=$$(kubectl get pod $$POD_NAME -n $(DEMO_NAMESPACE) -o jsonpath='{.metadata.annotations.podmortem\.io/analyzed-at}' 2>/dev/null); \
+				if [ -n "$$SEVERITY" ]; then echo "Severity: $$SEVERITY"; fi; \
+				if [ -n "$$TIMESTAMP" ]; then echo "Analyzed at: $$TIMESTAMP"; fi; \
+				echo "----------------------------------------"; \
+				echo "Tip: Use 'kubectl describe pod $$POD_NAME -n $(DEMO_NAMESPACE)' to see full details"; \
+				break; \
+			fi; \
+		fi; \
+		EVENT=$$(kubectl get events -n $(DEMO_NAMESPACE) --field-selector reason=PodmortemAnalysisComplete -o jsonpath='{.items[0].message}' 2>/dev/null); \
+		if [ -n "$$EVENT" ] && [ "$$i" -gt 10 ]; then \
 			echo ""; \
-			kubectl get podmortem demo-monitor -n $(DEMO_NAMESPACE) -o jsonpath='{.status.message}' 2>/dev/null | fold -s -w 80; \
+			echo "Analysis event detected (truncated summary):"; \
+			echo "$$EVENT" | fold -s -w 80; \
 			echo ""; \
-			echo "----------------------------------------"; \
-			echo "Analysis Phase:"; \
-			kubectl get podmortem demo-monitor -n $(DEMO_NAMESPACE) -o jsonpath='{.status.phase}' 2>/dev/null; \
-			echo ""; \
+			echo "Note: Full analysis may be available in pod annotations or Podmortem status"; \
 			break; \
 		fi; \
 		echo "Waiting for analysis... ($$i/60)"; \
@@ -119,9 +138,28 @@ watch-analysis:
 	@kubectl get podmortem -n $(DEMO_NAMESPACE) --watch
 
 .PHONY: get-analysis
-get-analysis:
+get-analysis: 
 	@kubectl config use-context $(KUBECTL_CONTEXT)
 	@kubectl get podmortem -n $(DEMO_NAMESPACE) -o yaml
+
+.PHONY: get-pod-analysis
+get-pod-analysis:
+	@kubectl config use-context $(KUBECTL_CONTEXT)
+	@POD_NAME=$$(kubectl get pods -l test-scenario=true -n $(DEMO_NAMESPACE) -o jsonpath='{.items[0].metadata.name}' 2>/dev/null); \
+	if [ -n "$$POD_NAME" ]; then \
+		echo "Pod: $$POD_NAME"; \
+		echo "----------------------------------------"; \
+		ANALYSIS=$$(kubectl get pod $$POD_NAME -n $(DEMO_NAMESPACE) -o jsonpath='{.metadata.annotations.podmortem\.io/analysis}' 2>/dev/null); \
+		if [ -n "$$ANALYSIS" ]; then \
+			echo "$$ANALYSIS"; \
+		else \
+			echo "No analysis found in pod annotations."; \
+			echo "Checking Podmortem CR status..."; \
+			kubectl get podmortem demo-monitor -n $(DEMO_NAMESPACE) -o jsonpath='{.status.recentFailures[0].explanation}' 2>/dev/null || echo "No analysis found."; \
+		fi; \
+	else \
+		echo "No test pod found. Run a test scenario first."; \
+	fi
 
 .PHONY: logs
 logs:

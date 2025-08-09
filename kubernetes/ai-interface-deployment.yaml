@@ -22,3 +22,17 @@ spec:
         env:
         - name: QUARKUS_LOG_LEVEL
           value: "INFO"
+        # Enable external prompts if ConfigMap is mounted
+        - name: PODMORTEM_PROMPTS_EXTERNAL_ENABLED
+          value: "false"  # Set to "true" to enable external prompts
+        - name: PODMORTEM_PROMPTS_EXTERNAL_PATH
+          value: "/etc/podmortem/prompts"
+        volumeMounts:
+        - name: external-prompts
+          mountPath: /etc/podmortem/prompts
+          readOnly: true
+      volumes:
+      - name: external-prompts
+        configMap:
+          name: podmortem-external-prompts
+          optional: true  # Don't fail if ConfigMap doesn't exist
